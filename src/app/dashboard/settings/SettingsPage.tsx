@@ -3,18 +3,19 @@
 import aplyToast from "@/components/ui/aply-toast";
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UpdateProfileValues, updateProfileSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
+import { User } from "next-auth";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { updateProfile } from "./actions";
@@ -24,6 +25,8 @@ interface SettingsPageProps {
 }
 
 export default function SettingsPage({ user }: SettingsPageProps) {
+  const session = useSession();
+
   const form = useForm<UpdateProfileValues>({
     resolver: zodResolver(updateProfileSchema),
     defaultValues: { name: user.name || "" },
@@ -33,6 +36,7 @@ export default function SettingsPage({ user }: SettingsPageProps) {
     try {
       await updateProfile(data);
       aplyToast("Profile updated.");
+      session.update();
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       aplyToast("An error occurred. Please try again.");

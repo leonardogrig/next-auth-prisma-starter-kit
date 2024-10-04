@@ -1,4 +1,5 @@
 import getSession from "@/auth";
+import { Role } from "@prisma/client";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 
@@ -14,7 +15,7 @@ export default async function Page() {
     redirect("/api/auth/signin?callbackUrl=/admin");
   }
 
-  if (user.role !== "admin") {
+  if (user.role !== Role.ADMIN) {
     return (
       <main className="mx-auto my-10">
         <p className="text-center">You are not authorized to view this page</p>

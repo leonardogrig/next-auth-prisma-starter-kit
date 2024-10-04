@@ -8,8 +8,6 @@ export async function updateProfile(values: UpdateProfileValues) {
   const session = await getSession();
   const userId = session?.user?.id;
 
-  console.log("SESSION: ", session);
-
   if (!userId) {
     throw Error("Unauthorized");
   }
